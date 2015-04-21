@@ -3,9 +3,9 @@ import random
 import time
 
 def generate_children(current):
-	#get the current locaiton of the 0 (blank space) is at
+	#get the current location of the 0 (blank space) is at
 	current_location = current.state.index(0)
-	#inititate the list that will be sent back with the children
+	#initiate the list that will be sent back with the children
 	children = []
 
 	#generate the up move, if not at the top levels
@@ -18,7 +18,7 @@ def generate_children(current):
 
 	#generate the left move, if not on left-most side
 	if current_location % 3 != 0:
-		#left most indeces are all a factor of 3, so this loop will be ignored
+		#left most indices are all a factor of 3, so this loop will be ignored
 		#if we are at the left most tiles
 		left_index = current_location - 1
 		left = current.state[:]
@@ -27,7 +27,7 @@ def generate_children(current):
 
 	#generate the right move, if not on right-most side
 	if current_location != 2 and current_location != 5 and current_location != 8:
-		#right-most indeces are 2, 5, 8, so we create a child if we are not
+		#right-most indices are 2, 5, 8, so we create a child if we are not
 		#in any of these
 		right_index = current_location + 1
 		right = current.state[:]
@@ -36,7 +36,7 @@ def generate_children(current):
 
 	#generate the down move, if not on the bottom-most tiles
 	if current_location < 5:
-		#bottom-most indeces are greater than 5, so we can just exclude them
+		#bottom-most indices are greater than 5, so we can just exclude them
 		bottom_index = current_location + 3
 		down = current.state[:]
 		down = swap(down, current_location, bottom_index)
@@ -44,10 +44,12 @@ def generate_children(current):
 
 	return children
 
+	
 def swap(L, i, j):
 	L[j], L[i] = L[i], L[j]
 	return L
 
+	
 def in_place_selection_sort(L):
 	#CPSC 335 Code
 	#Algorithm takes the lowest heuristic value and puts it in the first spot of the array.
@@ -61,20 +63,52 @@ def in_place_selection_sort(L):
 		L[k], L[least] = L[least], L[k]
 	return L
 
-def calculate_heuristic_value(current, goal):
+
+def sum_of_distances_out_of_place(current, goal):
+	heuristic_value = 0
+	for i in range(1, 9):
+		# Reference from:
+		# http://www.cyotek.com/blog/converting-2d-arrays-to-1d-and-accessing-as-either-2d-or-1d
+		current_index = current.state.index(i)
+		cy = current_index / 3
+		cx = current_index - (cy * 3)
+		
+		goal_index = goal.index(i)
+		gy = goal_index / 3
+		gx = goal_index - (cy * 3)
+		#Reference from:
+		#http://stackoverflow.com/questions/16318757/calculating-manhattan-distance-in-python-in-an-8-puzzle-game
+		heuristic_value += abs(cx - gx) + abs(cy - gy)
+	return heuristic_value + current.depth
+	
+def tiles_out_of_place(current, goal):
 	#Assign a heuristic value to each by comparing child to goal state
 	heuristic_value = 0 
-	heuristic_value += (current.depth)
-	print(current.depth)
 	#heuristic value goes up for each cv and gv that don't match
 	#cv = current value and gv = goal value
 	for cv, gv in zip(current.state, goal):
 		if(cv != gv):
 			if(cv != 0):
+				#Ignores the blank as it is not a tile.
 				heuristic_value += 1
-	return heuristic_value
+	return heuristic_value + current.depth
 
-def best_first_search(start, goal):
+
+def calculate_heuristic_value(current, goal, choice):
+	heuristic_value = 0
+	if choice == 1:
+		heuristic_value = tiles_out_of_place(current, goal)
+		return heuristic_value
+	elif choice == 2:
+		heuristic_value = sum_of_distances_out_of_place(current, goal)
+		return heuristic_value
+	elif choice == 3:
+		pass
+	else:
+		sys.exit(1)
+	
+	
+def best_first_search(start, goal, choice):
 	#Begin Best-First Search Algorithm
 	#Set up the open and closed states.
 	#Open state is initiated empty.
@@ -113,7 +147,7 @@ def best_first_search(start, goal):
 						index = closed_states.index(node)
 						break
 
-				child.heuristic_value = calculate_heuristic_value(child, goal)
+				child.heuristic_value = calculate_heuristic_value(child, goal, choice)
 
 				if exists_in_open == False and exists_in_closed == False:
 					#child does not exists in both states
@@ -136,12 +170,11 @@ def best_first_search(start, goal):
 		#Sort the open states by heuristic merit
 		open_states = in_place_selection_sort(open_states)
 		open_states.reverse()
-		# print("open states -----------")
-		# for state in open_states:
-		#	print_state(state.state)
-		#	print ("h-val = %i" % state.heuristic_value)
-		# print ("End of iteration---------")
-		# time.sleep(1)
+		print("open states -----------")
+		for state in open_states:
+			print_state(state.state)
+			print ("h-val = %i" % state.heuristic_value)
+		print ("End of iteration---------")
 
 	return None
 
@@ -164,21 +197,34 @@ class Node:
 		self.depth = depth
 		self.heuristic_value = heuristic_value
 
+		
 def main():
+	# Setting up a value to pass in through the terminal, to decide which heuristic to used.
+	if int(sys.argv[1]) > 0 and int(sys.argv[1]) < 4 and len(sys.argv) == 2:
+		choice = int(sys.argv[1])
+	else:
+		# Choice will just default to one, in case the values are not what the program demands.
+		choice = 1
+	
 	print ("Welcome to the CS481 Artificial Intelligence Term Project")
-
+	if choice == 1:
+		print("You selected the tiles out of place heuristic")
+	elif choice == 2:
+		print("You selected the sum of distances out of place heuristic")
+	elif choice == 3:
+		pass
 	#Initiating start state for 8-puzzle by shuffling the values of the start state.
 	#Book example in page 141
-	start = [2,8,3,1,6,4,7,5,0]
+	start = [2, 8, 3, 1, 6, 4, 7, 0, 5]
 	#start = [1,2,3,8,0,4,7,6,5]
-	#random.shuffle(start)
+	random.shuffle(start)
 
 	#Initiating the goal state of the 8-puzzle
 	goal = [1,2,3,8,0,4,7,6,5]
 
-	#Call Best-First Search Algorithm Funciton
+	#Call Best-First Search Algorithm Function
 	print("Please wait.....")
-	result = best_first_search(start, goal)
+	result = best_first_search(start, goal, choice)
 
 	for res in result:
 		print("-------Results---------")
@@ -187,5 +233,6 @@ def main():
 		print_state(res.state)
 		print("")
 
+		
 if __name__ == '__main__':
 	main()
