@@ -283,10 +283,12 @@ def main():
     # To try a more challenging puzzle, comment out the initialization of start above this line.|
     # Then uncomment the line in between this section. Make sure to also comment out the random |
     # line that shuffles the values of start.
-    start = [6, 5, 8, 1, 2, 3, 7, 4, 0]
+
+    # start = [6, 5, 8, 1, 2, 3, 7, 4, 0]
+    
     # tile_out_of_place runtime = 23.424854628989124 seconds                                    |
     # sum_of_distances_out_of_place = 0.0490403250005329 seconds                                |
-    # tile_reversal = 19.943393863009987 seconds
+    # tile_reversal = 19.943393863009987 seconds                                                |
     # *******************************************************************************************
 
     #random.shuffle(start)
