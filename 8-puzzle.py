@@ -82,7 +82,7 @@ def tile_reversal(current, goal):
             if current_index - 3 == goal_index:
                 # Candidate for reversal. Now to check if the candidate is also reversed.
                 candidate = current.state[goal_index]
-                if candidate == goal[current_index]:
+                if candidate == goal[current_index] and candidate != 0:
                     # We have a match
                     reversal += 1
 
@@ -91,7 +91,7 @@ def tile_reversal(current, goal):
             if current_index - 1 == goal_index:
                 # Candidate for reversal. Now to check if the candidate is also reversed.
                 candidate = current.state[goal_index]
-                if candidate == goal[current_index]:
+                if candidate == goal[current_index] and candidate != 0:
                     # We have a match
                     reversal += 1
 
@@ -100,7 +100,7 @@ def tile_reversal(current, goal):
             if current_index + 1 == goal_index:
                 # Candidate for reversal. Now to check if the candidate is also reversed.
                 candidate = current.state[goal_index]
-                if candidate == goal[current_index]:
+                if candidate == goal[current_index] and candidate != 0:
                     # We have a match
                     reversal += 1
 
@@ -109,7 +109,7 @@ def tile_reversal(current, goal):
             if current_index + 3 == goal_index:
                 # Candidate for reversal. Now to check if the candidate is also reversed.
                 candidate = current.state[goal_index]
-                if candidate == goal[current_index]:
+                if candidate == goal[current_index] and candidate != 0:
                     # We have a match
                     reversal += 1
     return 2 * reversal
