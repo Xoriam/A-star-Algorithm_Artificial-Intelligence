@@ -275,7 +275,7 @@ def main():
         print("It also tracks for any tile reversals that may occur.")
     # Initiating start state for 8-puzzle by shuffling the values of the start state.
     # Book example in page 141
-    # start = [2, 8, 3, 1, 6, 4, 7, 0, 5]
+    start = [2, 8, 3, 1, 6, 4, 7, 0, 5]
     # start = [2, 8, 3, 1, 6, 4, 0, 7, 5]
     # start = [1, 2, 3, 8, 0, 4, 7, 6, 5]
 
@@ -285,7 +285,7 @@ def main():
     # line that shuffles the values of start.
 
     # start = [6, 5, 8, 1, 2, 3, 7, 4, 0]
-    
+
     # tile_out_of_place runtime = 23.424854628989124 seconds                                    |
     # sum_of_distances_out_of_place = 0.0490403250005329 seconds                                |
     # tile_reversal = 19.943393863009987 seconds                                                |
@@ -307,6 +307,7 @@ def main():
         print("-------------------------")
         print("Depth = %i" % res.depth)
         print("Cost = %i" % res.cost)
+        print("Direction = %s" % res.direction)
         print_state(res.state)
         print("-------------------------")
     print( 'Elapsed time = ' + str(end - begin) + ' seconds' )
