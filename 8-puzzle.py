@@ -290,7 +290,7 @@ def main():
 	for res in result:
 		print("-------------------------")
 		print("Depth = %i" % res.depth)
-		print("HV = %i" % res.cost)
+		print("Cost = %i" % res.cost)
 		print_state(res.state)
 		print("-------------------------")
 
