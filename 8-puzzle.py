@@ -231,7 +231,7 @@ def best_first_search(start, goal, choice):
         # Sort the open states by heuristic merit
         open_states = in_place_selection_sort(open_states)
 
-    return None
+    sys.exit("Open states list is empty. No solution was found.")
 
 
 def print_state(node):
