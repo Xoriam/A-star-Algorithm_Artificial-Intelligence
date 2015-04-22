@@ -275,17 +275,30 @@ def main():
         print("It also tracks for any tile reversals that may occur.")
     # Initiating start state for 8-puzzle by shuffling the values of the start state.
     # Book example in page 141
-    start = [2, 8, 3, 1, 6, 4, 0, 7, 5]
-
+    # start = [2, 8, 3, 1, 6, 4, 7, 0, 5]
+    # start = [2, 8, 3, 1, 6, 4, 0, 7, 5]
     # start = [1, 2, 3, 8, 0, 4, 7, 6, 5]
-    # random.shuffle(start)
+
+    # *******************************************************************************************
+    # To try a more challenging puzzle, comment out the initialization of start above this line.|
+    # Then uncomment the line in between this section. Make sure to also comment out the random |
+    # line that shuffles the values of start.
+    start = [6, 5, 8, 1, 2, 3, 7, 4, 0]
+    # tile_out_of_place runtime = 23.424854628989124 seconds                                    |
+    # sum_of_distances_out_of_place = 0.0490403250005329 seconds                                |
+    # tile_reversal = 19.943393863009987 seconds
+    # *******************************************************************************************
+
+    #random.shuffle(start)
 
     # Initiating the goal state of the 8-puzzle
     goal = [1, 2, 3, 8, 0, 4, 7, 6, 5]
 
     # Call Best-First Search Algorithm Function
     print("Please wait.....")
+    begin = time.perf_counter()
     result = best_first_search(start, goal, choice)
+    end = time.perf_counter()
 
     print("================Results==============")
     for res in result:
@@ -294,6 +307,7 @@ def main():
         print("Cost = %i" % res.cost)
         print_state(res.state)
         print("-------------------------")
+    print( 'Elapsed time = ' + str(end - begin) + ' seconds' )
 
 
 if __name__ == '__main__':
