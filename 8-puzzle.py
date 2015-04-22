@@ -1,3 +1,8 @@
+# Name: Mario Andrade
+# CPSC 481-Term Project
+# Best-First Search(A* Algorithm)
+
+
 import sys
 import random
 import time
